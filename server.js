@@ -9,16 +9,11 @@ var PORT = process.env.PORT || 8080;
 app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
    
-
- 
-
-// Data
-
 // API Routes
 
 
 app.get("/api/notes", function(req, res){
-    fs.readFile("db/db.json", "utf8", function(err){
+    fs.readFile("./db/db.json", "utf8", function(err){
     if (err)
     return err
     })
@@ -28,14 +23,15 @@ app.get("/api/notes", function(req, res){
 
 
 app.post("/api/notes", function(req, res){
+    
     var newNote = req.body;
-    newNote.id = db.length
+    newNote.id = db.length;
     console.log(newNote);
     db.push(newNote);
     
 
-
-    fs.writeFileSync("db/db.json", db, "utf8", function(err){
+    
+    fs.writeFileSync("./db/db.json", JSON.stringify(db), "utf8", function(err){
         if (err)
         return err
     })
