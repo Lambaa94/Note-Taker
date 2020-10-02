@@ -1,7 +1,7 @@
 var express = require("express");
 const fs = require("fs");
 var path = require("path");
-
+const db = require("./db/db.json")
 
 var app = express();
 var PORT = process.env.PORT || 8080;
@@ -9,33 +9,43 @@ var PORT = process.env.PORT || 8080;
 app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
    
-    
- // Data
 
- var notes = []
+ 
+
+// Data
 
 // API Routes
-// this should use fs.readFile
+
+
 app.get("/api/notes", function(req, res){
-    return res.json(notes)
+    fs.readFile("db/db.json", "utf8", function(err){
+    if (err)
+    return err
+    })
+    return res.json(db)
+   
 });
-// add an id to a new object
+
+
 app.post("/api/notes", function(req, res){
     var newNote = req.body;
-    newNote.id = notes.length
+    newNote.id = db.length
     console.log(newNote);
-    notes.push(newNote);
-    // Trying to write the new note
-    // fs.writeFile("db/db.json", db, function(err){
-    //     if (err)
-    //     return err
-    // })
+    db.push(newNote);
+    
+
+
+    fs.writeFileSync("db/db.json", db, "utf8", function(err){
+        if (err)
+        return err
+    })
     return res.end();
 });
-// for loop
+
+
+
 app.delete("/api/notes/:id", function(req, res){
-// I want to take the information in db and delete it then post over the new notes
-// need to read then re rewrite information.    
+
 const newDb = db.filter(note => note.id !== req.params.id)
     return res.json(newDb) ;
 });
