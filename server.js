@@ -13,13 +13,12 @@ app.use(express.json());
 app.get("/api/notes/", function (req, res) {
     fs.readFile("./db/db.json", "utf8", function (err, db) {
         if (err) {
-            console.log(err)
+
             return err
         }
         console.log(db)
         return res.json(JSON.parse(db))
     })
-
 
 });
 
@@ -34,7 +33,7 @@ app.post("/api/notes/", function (req, res) {
 
         fs.writeFile("./db/db.json", JSON.stringify(db), "utf8", function (err) {
             if (err) {
-                console.log(err)
+
                 return err
             }
             return res.json(newNote)
@@ -49,18 +48,14 @@ app.delete("/api/notes/:id", function (req, res) {
         const newDb = db.filter(note => note.id != req.params.id);
         fs.writeFile("./db/db.json", JSON.stringify(newDb), "utf8", function (err) {
             if (err) {
-                console.log(err)
                 return err
             }
-            console.log("test")
             return res.json(newDb);
         });
     });
 });
 
 app.use(express.static('public'));
-
-
 
 
 // HTML ROUTES
