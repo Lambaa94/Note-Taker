@@ -28,7 +28,7 @@ app.post("/api/notes/", function (req, res) {
     fs.readFile("./db/db.json", "utf8", function (err, data) {
         var newNote = req.body;
         var db = JSON.parse(data)
-        newNote.id = db.length;
+        newNote.id = db.length + 1;
         console.log(newNote);
         db.push(newNote);
 
