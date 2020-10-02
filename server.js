@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 // API Routes
 
 
-app.get("/api/notes", function(req, res){
+app.get("/api/notes/", function(req, res){
     fs.readFile("./db/db.json", "utf8", function(err){
     if (err)
     return err
@@ -22,7 +22,7 @@ app.get("/api/notes", function(req, res){
 });
 
 
-app.post("/api/notes", function(req, res){
+app.post("/api/notes/", function(req, res){
     
     var newNote = req.body;
     newNote.id = db.length;
@@ -38,12 +38,14 @@ app.post("/api/notes", function(req, res){
     return res.end();
 });
 
-
-
 app.delete("/api/notes/:id", function(req, res){
 
-const newDb = db.filter(note => note.id !== req.params.id)
-    return res.json(newDb) ;
+const newDb = db.filter(note => note.id != req.params.id);
+    fs.writeFileSync("./db/db.json", JSON.stringify(newDb), "utf8", function(err){
+        if (err)
+        return err
+    });
+      return res.json(newDb);
 });
 
 app.use(express.static('public'));
